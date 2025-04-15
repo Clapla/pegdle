@@ -1,70 +1,162 @@
-# Getting Started with Create React App
+# Pegdle - Daily Peg Solitaire Puzzle
+
+Pegdle is a daily puzzle game inspired by Wordle and Nerdle, bringing the classic Peg Solitaire game into a fun, bite-sized daily challenge format. Each day, players around the world face the same puzzle, trying to clear the board with strategic jumps while using the minimum number of moves.
+
+## 🎮 Game Overview
+
+- **Daily Challenge**: A new puzzle each day, the same for all players
+- **Multiple Board Types**: Classic English, European, Triangle, and Mini layouts
+- **Difficulty Levels**: Adjustable for casual and expert play
+- **Score Tracking**: Compare your performance against personal bests
+- **Responsive Design**: Play on any device
+
+## 🚀 How to Play
+
+1. Jump pegs over each other to remove them from the board
+2. A peg can jump over an adjacent peg into an empty hole
+3. The jumped peg is removed
+4. Try to clear the board, leaving only one peg
+5. Challenge yourself to solve each puzzle in the minimum number of moves!
+
+## 🛠️ Development Roadmap
+
+### Phase 1: Perfecting Solo Experience ✅
+
+1. **Smooth Animations & Visual Feedback** ✅
+   - ✅ Refine peg jump and capture animations
+   - ✅ Add subtle particle effects for successful moves
+   - ✅ Create satisfying victory animation sequence
+   - ✅ Implement responsive sizing for different devices
+
+2. **Enhanced User Interface** ✅
+   - ✅ Create minimalist, distraction-free design
+   - ✅ Develop cohesive color scheme and visual identity
+   - ✅ Improve board visibility and playability
+   - ✅ Design elegant dark color scheme with gold accents
+
+3. **Game Feel Enhancements** ✅
+   - ✅ Add micro-animations for user interactions
+   - ✅ Optimize touch targets and drag sensitivity
+   - ✅ Create "juicy" feedback for successful moves
+   - ✅ Add helpful hints with daily limits
+
+4. **Wordlike Reward Mechanics** ✅
+   - ✅ Design minimalist success/progress indicators
+   - ✅ Add simple confetti/celebration for victories
+   - ✅ Create shareable daily results (like Wordle squares)
+   - ✅ Implement multiple difficulty levels
+
+5. **Performance Optimization** ✅
+   - ✅ Ensure smooth animations on all devices
+   - ✅ Optimize rendering for efficiency (component memoization)
+   - ✅ Reduce unnecessary re-renders
+   - ✅ Implement caching for daily puzzles and user preferences
+
+### Phase 2: Core Game Features (IN PROGRESS)
+
+1. **Daily Challenge Experience** (✅ Partially Complete)
+   - ⬜ Add calendar view to show past challenges
+   - ✅ Implement difficulty progression with selectable levels
+   - ✅ Track and limit hint usage for daily challenges
+   - ⬜ Design "perfect week" bonus challenges
+
+2. **Game Modes & Variations** (✅ Partially Complete)
+   - ✅ Refine existing board layouts (fixed triangle board)
+   - ✅ Implement practice mode with unlimited hints
+   - ✅ Add multiple board types (English, European, Triangle, Mini)
+   - ⬜ Add timed challenge mode
+
+3. **Progressive Tutorials** (⬜ To Do)
+   - ⬜ Create guided first-time experience
+   - ⬜ Design strategy tips that appear after losses
+   - ✅ Implement intelligent hint system with move analysis
+   - ⬜ Add optional advanced technique tutorials
+
+### Phase 3: Social & Advanced Features
+
+1. **Social Elements**
+   - Implement social sharing of results
+   - Create streak tracking for daily challenges
+   - Design shareable performance graphs
+   - Add optional result comparisons
+
+2. **Advanced Game Features**
+   - Create themed board designs for holidays
+   - Add weekly special challenges
+   - Implement achievement system
+   - Create custom puzzle creator
+
+### Phase 4: Infrastructure & User Accounts (Future)
+
+1. **User Account System**
+   - Add optional user accounts
+   - Implement cross-device synchronization
+   - Create persistent statistics
+   - Add profile customization
+
+2. **Community Features**
+   - Add leaderboards
+   - Implement friend challenges
+   - Create community puzzle sharing
+   - Add minimal, non-intrusive ads in designated areas
+
+## 💻 Technical Setup
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### Project Structure
 
-In the project directory, you can run:
+The code is organized into the following structure:
 
-### `npm start`
+- `/src` - Main source code
+  - `/components` - React components
+    - `/modals` - Modal dialog components
+  - `/hooks` - Custom React hooks
+  - `/utils` - Utility functions and constants
+  - `/styles` - Styling modules
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Key components:
+- `App.js` - Main application component
+- `components/GameBoard.js` - Game board rendering and interaction
+- `components/Cell.js` - Individual board cell component
+- `components/Particles.js` - Particle effects for captured pegs
+- `components/Confetti.js` - Celebration effects for victories
+- `components/GameControls.js` - Game controls UI
+- `components/modals/VictoryModal.js` - Victory celebration and sharing
+- `hooks/useGameBoard.js` - Game board state and logic
+- `hooks/useDailyChallenge.js` - Daily challenge generation and management
+- `hooks/useGameState.js` - Overall game state including limited hints
+- `utils/boardConfigs.js` - Board layouts and difficulty settings
+- `utils/gameUtils.js` - Game logic and intelligent hint system
+- `utils/storageUtils.js` - Local storage caching for persistence
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Performance Optimizations
 
-### `npm test`
+The code includes several optimizations to ensure smooth gameplay:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. **Component Memoization** - React.memo is used for all components to prevent unnecessary re-renders
+2. **Local Storage Caching** - Daily challenges are cached to avoid regeneration on page refresh
+3. **Efficient State Management** - Custom hooks separate concerns and minimize state updates
+4. **Optimized Animations** - CSS animations use hardware acceleration and avoid layout thrashing
+5. **Batch Updates** - State updates are batched where possible to reduce render cycles
+6. **User Preference Persistence** - Settings like difficulty level are saved between sessions
+7. **Lazy Initialization** - Heavy calculations are deferred until needed
+8. **Throttled Events** - Drag events are throttled to improve performance
 
-### `npm run build`
+### Available Scripts
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- `npm start` - Runs the app in development mode
+- `npm test` - Launches the test runner
+- `npm run build` - Builds the app for production
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🤝 Contributing
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Interested in contributing? We welcome pull requests! Please check the issues page for current tasks or add your own suggestions.
 
-### `npm run eject`
+## 📝 License
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Pegdle: A new puzzle everyday. How few moves can you solve it in?
