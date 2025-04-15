@@ -57,12 +57,12 @@ Pegdle is a daily puzzle game inspired by Wordle and Nerdle, bringing the classi
 1. **Daily Challenge Experience** (✅ Partially Complete)
    - ⬜ Add calendar view to show past challenges
    - ✅ Implement difficulty progression with selectable levels
-   - ✅ Track and limit hint usage for daily challenges
+   - 🔄 Track and limit hint usage for daily challenges (needs fixes)
    - ⬜ Design "perfect week" bonus challenges
 
 2. **Game Modes & Variations** (✅ Partially Complete)
    - ✅ Refine existing board layouts (fixed triangle board)
-   - ✅ Implement practice mode with unlimited hints
+   - 🔄 Implement practice mode with unlimited hints (needs fixes)
    - ✅ Add multiple board types (English, European, Triangle, Mini)
    - ⬜ Add timed challenge mode
 
@@ -71,6 +71,15 @@ Pegdle is a daily puzzle game inspired by Wordle and Nerdle, bringing the classi
    - ⬜ Design strategy tips that appear after losses
    - ✅ Implement intelligent hint system with move analysis
    - ⬜ Add optional advanced technique tutorials
+
+### Known Issues & To-Do
+
+1. **Hint System Fixes** (🔴 Priority)
+   - Fix infinite update loop in hint tracking (partially fixed)
+   - Fix hint count persistence across game mode changes
+   - Ensure hint counter resets properly for daily challenges
+   - Make hint button correctly show available hints
+   - Fix "maximum update depth exceeded" errors in both Classic and Daily challenge modes
 
 ### Phase 3: Social & Advanced Features
 

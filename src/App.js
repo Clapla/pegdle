@@ -141,34 +141,40 @@ function PegSolitaire() {
     }
   }, [isDailyChallenge, boardType, difficulty, board, getTodaysChallenge, initBoard, boardConfigs]);
   
-  // Listen for storage changes
+  // Load hint count only on initial render and game mode change
   useEffect(() => {
-    // This manually checks localStorage since the storage event
-    // doesn't fire in the same tab that made the change
-    const checkHintCount = () => {
+    // Only check hint count for daily challenges
+    if (isDailyChallenge) {
       try {
+        const today = new Date().toDateString();
         const hintCountData = localStorage.getItem('pegSolitaireHintCount');
+        
         if (hintCountData) {
           const hintData = JSON.parse(hintCountData);
-          if (hintData && hintData.date === new Date().toDateString()) {
-            // Update hints remaining
-            setHintsRemaining(Math.max(0, 3 - hintData.count));
+          
+          // Only update if it's today's data
+          if (hintData && hintData.date === today) {
+            // Update hints remaining (without triggering a setState loop)
+            const newHintsRemaining = Math.max(0, 3 - hintData.count);
+            setHintsRemaining(newHintsRemaining);
+          } else {
+            // Reset for a new day
+            setHintsRemaining(3);
           }
+        } else {
+          // No hint data yet, start with 3
+          setHintsRemaining(3);
         }
       } catch (error) {
-        console.error('Error checking hint count:', error);
+        console.error('Error loading hint count:', error);
+        // Set default value
+        setHintsRemaining(3);
       }
-    };
-    
-    // Set up an interval to check regularly
-    const interval = setInterval(checkHintCount, 1000);
-    
-    // Do an immediate check
-    checkHintCount();
-    
-    // Cleanup
-    return () => clearInterval(interval);
-  }, [setHintsRemaining]);
+    } else {
+      // For classic mode, reset but don't check localStorage
+      setHintsRemaining(3);
+    }
+  }, [isDailyChallenge, setHintsRemaining]);
 
   // Check for game end
   useEffect(() => {
@@ -234,9 +240,15 @@ function PegSolitaire() {
       layout: challenge.initialBoard
     });
     
+    // Clear any hint display or selection
+    setShowHint(false);
+    setSelectedPeg(null);
+    setValidMoves([]);
+    
+    // Reset game status (includes hint state reset)
     resetGameStatus();
     setShowDailyChallenge(false);
-  }, [dailyChallenge, generateDailyChallenge, difficulty, initBoard, resetGameStatus, setBoardType, setShowDailyChallenge, boardConfigs]);
+  }, [dailyChallenge, generateDailyChallenge, difficulty, initBoard, resetGameStatus, setBoardType, setShowDailyChallenge, boardConfigs, setShowHint, setSelectedPeg, setValidMoves]);
   
   // We don't need a separate tracking function - we'll handle this directly
   
@@ -256,27 +268,43 @@ function PegSolitaire() {
     const bestMove = findBestHintMove(board);
     
     if (bestMove) {
-      // For daily challenges, update the hint count directly
+      // Track hint usage for daily challenges
       if (isDailyChallenge) {
+        // Manually update hint tracking rather than using hook
         const today = new Date().toDateString();
-        const newCount = hintsRemaining > 0 ? 3 - hintsRemaining + 1 : 3;
+        let newCount = 0;
         
-        // Create the new hint data
-        const newHintCount = { 
-          date: today, 
-          count: newCount
-        };
-        
-        // Directly update local storage
+        // Get current data from localStorage
         try {
-          localStorage.setItem('pegSolitaireHintCount', JSON.stringify(newHintCount));
+          const storedData = localStorage.getItem('pegSolitaireHintCount');
+          if (storedData) {
+            const parsedData = JSON.parse(storedData);
+            if (parsedData.date === today) {
+              newCount = parsedData.count + 1;
+            } else {
+              newCount = 1; // First hint of a new day
+            }
+          } else {
+            newCount = 1; // First hint ever
+          }
           
-          // Also update the state directly
+          // Create new hint data
+          const newHintData = {
+            date: today,
+            count: newCount
+          };
+          
+          // Save to localStorage
+          localStorage.setItem('pegSolitaireHintCount', JSON.stringify(newHintData));
+          
+          // Update hints remaining
           setHintsRemaining(Math.max(0, 3 - newCount));
+          
         } catch (e) {
-          console.error('Failed to save hint count:', e);
+          console.error('Error updating hint count:', e);
         }
       }
+      // For classic mode, we don't need to track hint usage
       
       // First, select the peg to show valid moves
       selectPeg(bestMove.from[0], bestMove.from[1]);
@@ -323,6 +351,25 @@ function PegSolitaire() {
     setSelectedPeg(null);
     setValidMoves([]);
     
+    // Reset hints appropriately based on game mode
+    if (!isDailyChallenge) {
+      // Classic mode always has 3 hints
+      setHintsRemaining(3);
+    } else {
+      // For daily challenge, reload from storage
+      try {
+        const hintData = JSON.parse(localStorage.getItem('pegSolitaireHintCount') || '{}');
+        const today = new Date().toDateString();
+        if (hintData.date === today) {
+          setHintsRemaining(Math.max(0, 3 - hintData.count));
+        } else {
+          setHintsRemaining(3);
+        }
+      } catch (e) {
+        setHintsRemaining(3);
+      }
+    }
+    
     setBoardType(newBoardType);
     initBoard(boardConfigs[newBoardType]);
     resetGameStatus();
@@ -332,7 +379,9 @@ function PegSolitaire() {
     resetGameStatus,
     setShowHint,
     setSelectedPeg,
-    setValidMoves
+    setValidMoves,
+    setHintsRemaining,
+    isDailyChallenge
   ]);
   
   // Handle difficulty change
